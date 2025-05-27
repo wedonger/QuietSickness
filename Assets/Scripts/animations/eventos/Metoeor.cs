@@ -14,7 +14,7 @@ public class Metoeor : MonoBehaviour
     }
     void Update()
     {
-        if (areaAtivacao.bounds.Contains(player.position))
+        if (areaAtivacao.bounds.Contains(player.position)) { 
             animator.SetBool("entroNaAreaBoom", true);
         }
     }
