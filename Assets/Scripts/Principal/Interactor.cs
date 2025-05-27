@@ -17,6 +17,7 @@ public class Interactor : MonoBehaviour
     public Transform holdPos;
     private int LayerNumber;
     private bool segurando;
+    public Ligo lampada;
 
     void Update()
     {
@@ -39,7 +40,10 @@ public class Interactor : MonoBehaviour
 
                         break;
                     case "objLeve":
-                        pegarObjeto(hitInfo.collider.gameObject, 0);
+                        pegarObjeto(obj, 0);
+                        break;
+                    case "lampada":
+                        lampada.interacao();
                         break;
                 }
             }
@@ -50,7 +54,6 @@ public class Interactor : MonoBehaviour
         if (segurando)
         {
             soltaObjeto();
-            segurando = false;
             return;
         }
         if (objetor.GetComponent<Rigidbody>()) //make sure the object has a RigidBody
@@ -71,5 +74,6 @@ public class Interactor : MonoBehaviour
         heldObjRb.isKinematic = false;
         heldObj.transform.parent = null; //unparent object
         heldObj = null; //undefine game object
+        segurando = false;
     }
 }

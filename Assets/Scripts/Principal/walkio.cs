@@ -1,0 +1,72 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class walkio : MonoBehaviour
+{
+    public TMP_Text texto;
+    private float frequencia = 100;
+    private float Maxfrequencia = 100;
+    public float senseTrocarFreq = 10;
+    private float volumeGeralDasTransimssao = 1f;
+    public AudioSource chiadoGlobal;
+    public Transform player;
+    void Update()
+    {
+        atualizaCoordenadas();
+        modulaFrequencia();
+        chiadoGlobal.volume = atualizaVolumeGeral();
+    }
+    void atualizaCoordenadas() {
+        texto.text = @$"X: {transform.position.x} Z: {transform.position.z}
+                freq: {frequencia}Hz";
+    }
+    float BuscaMultiplierChiado(Transform emissor) 
+    {
+        Vector3 toTarget = (emissor.position - transform.position).normalized;
+        float dot = Vector3.Dot(transform.forward, toTarget);
+        return dot < 0 ? dot * -1 : dot;
+    }
+    public float atualizaVolumeGeral() 
+    {
+        float oqSobrouDeVolume = volumeGeralDasTransimssao;
+        GameObject[] emissores = GameObject.FindGameObjectsWithTag("emissorDeRadio");
+        for (int i = 0; i < emissores.Length; i++)
+        {
+            float geralMenosMultiplier = (volumeGeralDasTransimssao - BuscaMultiplierChiado(emissores[i].transform));
+            geralMenosMultiplier = calculaDiffFrequencia(emissores[i], geralMenosMultiplier);
+            emissores[i].GetComponent<AudioSource>().volume = geralMenosMultiplier;
+            oqSobrouDeVolume -= geralMenosMultiplier;
+        }
+        return oqSobrouDeVolume;
+    }
+    public float calculaDiffFrequencia(GameObject emissor, float valorMultiplier) 
+    {
+        Match match = Regex.Match(emissor.name, @"\(([^)]*)\)");
+        int freqEmissor = Convert.ToInt32(match.Groups[1].Value);
+        float vidr = frequencia - freqEmissor;
+        if (vidr < 0) {
+            vidr = vidr * -1;
+        }
+        if (vidr >= 20 || vidr <= -20)
+        {
+            valorMultiplier = 0;
+        }
+        else {
+            valorMultiplier -= vidr / 100;
+        }
+        return valorMultiplier;
+    }
+    public void modulaFrequencia() 
+    {
+        float coeficienteFreq = Input.GetAxis("Mouse ScrollWheel") * senseTrocarFreq;
+        if (frequencia + coeficienteFreq < Maxfrequencia && frequencia + coeficienteFreq > 0) {
+            frequencia += coeficienteFreq;
+        }
+    }
+}

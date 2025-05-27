@@ -13,10 +13,9 @@ public class cactomove : MonoBehaviour
     public float movx;
     public float movy;
     public bool isGrounded;
-    public float jumpForce = 2;
+    public float jumpForce = 17f;
     private Rigidbody rb;
     public LayerMask chao;
-    public bool atacando;
 
     void Start()
     {
@@ -64,7 +63,7 @@ public class cactomove : MonoBehaviour
         deltaMove = new Vector3(movx, 0, movy) * Time.deltaTime * 2;
         mover.transform.Translate(deltaMove);
 
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.5f);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
 
         if (!isGrounded)
         {
@@ -83,15 +82,6 @@ public class cactomove : MonoBehaviour
         if (!isGrounded && Input.GetKey(KeyCode.LeftControl))
         {
             //agachamento
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            atacando = true;
-        }
-        else 
-        {
-            atacando = false;
         }
     }
 }

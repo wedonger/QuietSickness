@@ -22,7 +22,6 @@ public class stare : MonoBehaviour
         
         if (lugares != null && lugares.Length != 0) {
             int aleatorio = Random.Range(lugares.Length - 1, 0);
-            Debug.Log(aleatorio);
             this.transform.position = lugares[aleatorio].transform.position;
         }
     }

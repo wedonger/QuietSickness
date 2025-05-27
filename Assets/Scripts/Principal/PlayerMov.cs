@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -13,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed;
     public float speedfx = 6f;
     public float runspeed;
-    public float jump = 4f;
+    public float jump = 1f;
     
     public float TurnSmoothTime = 0.1f;
     public float TurnSmoothVelocity;
@@ -25,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
     public float yspeed;
     Vector3 velocity;
     public LayerMask groundMask;
-
 
     void Start()
     {       
@@ -72,8 +70,6 @@ public class PlayerMovement : MonoBehaviour
             velocity.y += jump;
         }
          
-        Debug.Log(isGrounded);
-
         //fazedor de movimento y
         controller.Move ((velocity * 1.2f) * Time.deltaTime);
     }
