@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class walkio : MonoBehaviour
 {
     public TMP_Text texto;
+    public int volume = 0;
     private float frequencia = 100;
     private float Maxfrequencia = 100;
     public float senseTrocarFreq = 10;
@@ -20,7 +21,7 @@ public class walkio : MonoBehaviour
     {
         atualizaCoordenadas();
         modulaFrequencia();
-        chiadoGlobal.volume = atualizaVolumeGeral();
+        chiadoGlobal.volume = atualizaVolumeGeral() * volume / 100;
     }
     void atualizaCoordenadas() {
         texto.text = @$"X: {transform.position.x} Z: {transform.position.z}
@@ -40,7 +41,7 @@ public class walkio : MonoBehaviour
         {
             float geralMenosMultiplier = (volumeGeralDasTransimssao - BuscaMultiplierChiado(emissores[i].transform));
             geralMenosMultiplier = calculaDiffFrequencia(emissores[i], geralMenosMultiplier);
-            emissores[i].GetComponent<AudioSource>().volume = geralMenosMultiplier;
+            emissores[i].GetComponent<AudioSource>().volume = geralMenosMultiplier * volume / 100;
             oqSobrouDeVolume -= geralMenosMultiplier;
         }
         return oqSobrouDeVolume;

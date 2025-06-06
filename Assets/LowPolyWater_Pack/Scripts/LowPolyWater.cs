@@ -116,7 +116,12 @@ namespace LowPolyWater
         }
         public float GetWaveHeight(float x)
         {
-            return amplitude * Mathf.Sin(x / waveHeight);
+            float distance = Vector3.Distance(new Vector3(x, 0, 0), waveOriginPosition);
+            distance = (distance % waveLength) / waveLength;
+
+            float y = waveHeight * Mathf.Sin(Time.time * Mathf.PI * 2.0f * waveFrequency
+                                             + (Mathf.PI * 2.0f * distance));
+            return y;
         }
     }
 }

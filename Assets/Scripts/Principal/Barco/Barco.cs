@@ -24,19 +24,12 @@ public class Barco : MonoBehaviour
     {
         float movy = Input.GetAxisRaw("Vertical");
         float movx = Input.GetAxisRaw("Horizontal");
-
-        Vector3 deltaMove = new Vector3(transform.rotation.y - 90, 0, movy) * Time.deltaTime / 4;
-        
-        if (movy == 1)
+        Vector3 deltaMove = motor.transform.forward * movy * speed;
+        rb.AddForceAtPosition(deltaMove, motor.position, ForceMode.Acceleration);
+        if (movx != 0)
         {
-            rb.AddForceAtPosition(deltaMove, motor.transform.position, ForceMode.Acceleration);
-
-            if (movx != 0)
-            {
-                trapaio += movx;
-                transform.localRotation = Quaternion.Euler(0, trapaio, 0);
-            }
-            transform.Translate(deltaMove);
+            trapaio += movx;
+            transform.localRotation = Quaternion.Euler(0, trapaio, 0);
         }
     }
 }
