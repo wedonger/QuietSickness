@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class walkio : MonoBehaviour
 {
@@ -19,13 +21,15 @@ public class walkio : MonoBehaviour
     public Transform player;
     void Update()
     {
-        atualizaCoordenadas();
+        string cardinal = buscaCardinal();
+        atualizaCoordenadas(cardinal);
         modulaFrequencia();
         chiadoGlobal.volume = atualizaVolumeGeral() * volume / 100;
     }
-    void atualizaCoordenadas() {
+    void atualizaCoordenadas(string cardinais) {
         texto.text = @$"X: {transform.position.x} Z: {transform.position.z}
-                freq: {frequencia}Hz";
+                freq: {frequencia}Hz
+                compass: {cardinais}";
     }
     float BuscaMultiplierChiado(Transform emissor) 
     {
@@ -69,5 +73,20 @@ public class walkio : MonoBehaviour
         if (frequencia + coeficienteFreq < Maxfrequencia && frequencia + coeficienteFreq > 0) {
             frequencia += coeficienteFreq;
         }
+    }
+    public string buscaCardinal()
+    {
+        Vector3 direcao2D = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
+
+        float angulo = Vector3.SignedAngle(Vector3.forward, direcao2D, Vector3.up);
+        float anguloCerto = (angulo + 360f) % 360f;
+        if (angulo >= -45f && angulo < 45f)
+            return "Norte " + anguloCerto; 
+        else if (angulo >= 45f && angulo < 135f)
+            return "Leste " + anguloCerto; 
+        else if (angulo >= -135f && angulo < -45f)
+            return "Oeste " + anguloCerto;
+        else
+            return "Sul " + anguloCerto;
     }
 }

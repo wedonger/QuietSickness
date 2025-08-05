@@ -8,12 +8,12 @@ public class cactomove : MonoBehaviour
     public Vector2 turn;
     public float sensitivity = .5f;
     public Vector3 deltaMove;
-    public float speed = 40;
+    public float speed = 10;
     public GameObject mover;
     public float movx;
     public float movy;
     public bool isGrounded;
-    public float jumpForce = 17f;
+    public float jumpForce = 150f;
     private Rigidbody rb;
     public LayerMask chao;
 
@@ -56,14 +56,14 @@ public class cactomove : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            movx = movx * 2;
-            movy = movy * 2;
+            movx = movx * 1.5f;
+            movy = movy * 1.5f;
         }
 
         deltaMove = new Vector3(movx, 0, movy) * Time.deltaTime * 2;
         mover.transform.Translate(deltaMove);
 
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.2f);
 
         if (!isGrounded)
         {
@@ -74,7 +74,7 @@ public class cactomove : MonoBehaviour
             turn.y = 0;
         }
 
-        if (isGrounded && Input.GetKey(KeyCode.Space))
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }

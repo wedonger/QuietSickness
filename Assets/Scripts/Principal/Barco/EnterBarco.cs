@@ -6,7 +6,6 @@ using UnityEngine;
 public class EnterBarco : MonoBehaviour , IInteractable
 {
     public static EnterBarco instance;
-    public GameObject Vehicle;
     public GameObject PlayerBackup;
     public bool inVehicle = false;
     Barco vehicleScript;
@@ -19,7 +18,7 @@ public class EnterBarco : MonoBehaviour , IInteractable
     Rigidbody rb;
     void Start()
     {
-        GameObject barco = GameObject.Find("Boiador");
+        GameObject barco = GameObject.Find("boiador");
         barco.GetComponent<Barco>();
         vehicleScript = barco.GetComponent<Barco>();
         vehicleScript.enabled = false;
@@ -35,7 +34,6 @@ public class EnterBarco : MonoBehaviour , IInteractable
 
     public void Awake()
     {
-        //Get the Mesh Filter of the gameobject
         if (instance == null)
         {
             instance = this;
@@ -46,13 +44,12 @@ public class EnterBarco : MonoBehaviour , IInteractable
         }
     }
 
-    // Update is called once per frame
     void OnTriggerStay(Collider other)
     {
-        //if (other.gameObject.tag == "Player" && inVehicle == false)
-        //{
-        //    guiObj.SetActive(true);
-        //}
+        if (other.gameObject.tag == "Player" && inVehicle == false)
+        {
+            //guiObj.SetActive(true);
+        }
     }
     void OnTriggerExit(Collider other)
     {
@@ -63,32 +60,35 @@ public class EnterBarco : MonoBehaviour , IInteractable
     }
     void Update()
     {
-        
+        if (inVehicle) {
+            player.transform.position = saida.position;
+            player.transform.rotation = saida.rotation;
+        }
     }
     public void Interact()
     {
-        if (!inVehicle)
-        {
-            // source.PlayOneShot(GetComponent<AudioSource>(), 1);
-            // guiObj.SetActive(false);
-            PlayerBackup.SetActive(true);
-            vehicleScript.enabled = true;
-            cactomover.enabled = false;
-            inVehicle = true;
-            //rb.useGravity = true;
-            player.transform.SetParent(saida);
-            player.transform.position = saida.position;
-            player.transform.rotation = saida.rotation;
-
-        }
-        else
+        if (inVehicle)
         {
             PlayerBackup.SetActive(false);
             vehicleScript.enabled = false;
             cactomover.enabled = true;
             inVehicle = false;
+            rb.mass = 1;
             player.transform.SetParent(null);
-            //rb.useGravity = false;
+            rb.useGravity = true;
+        }
+        else
+        {
+            //source.PlayOneShot(GetComponent<AudioSource>(), 1);
+            //guiObj.SetActive(false);
+            PlayerBackup.SetActive(true);
+            vehicleScript.enabled = true;
+            cactomover.enabled = false;
+            inVehicle = true;
+            rb.mass = 0;
+            rb.useGravity = false;
+            player.transform.SetParent(saida, true);
+            player.transform.position = saida.position;
         }
     }
 }
