@@ -10,7 +10,14 @@ public class lixo : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            merda.achouPlayer();
+            merda.achouPlayer(true);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            merda.achouPlayer(false);
         }
     }
 }

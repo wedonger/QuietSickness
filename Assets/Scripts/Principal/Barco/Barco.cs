@@ -51,4 +51,13 @@ public class Barco : MonoBehaviour
             }
         }
     }
+    public void salvarTempo()
+    {
+        saveSystem.salvaPosBarco(this);
+    }
+    public void loadTempo()
+    {
+        var obj = saveSystem.loadPosBarco();
+        
+    }
 }

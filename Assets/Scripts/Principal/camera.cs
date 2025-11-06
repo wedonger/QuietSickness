@@ -17,7 +17,10 @@ public class camera : MonoBehaviour
     {
         Ray raio = new Ray(this.transform.position, this.transform.forward);
         Physics.Raycast(raio, out hit, dessaNoz);
-        turn.y += Input.GetAxis("Mouse Y") * sensitivity;
+        if (!EnterMagneto.instance.inVehicle)
+        {
+            turn.y += Input.GetAxis("Mouse Y") * sensitivity;
+        }
 
         if (turn.y >= uplimit)
         {
