@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class CounterTempo : MonoBehaviour
@@ -7,6 +9,7 @@ public class CounterTempo : MonoBehaviour
     public Transform exo;
     public Transform escudo;
     private float duracaoDia = 600f;
+    private galoClasse obj = new galoClasse();
 
     public bool jaTocoCutsceneMeteoro;
     private float deltaTempoPraBonito;
@@ -14,6 +17,22 @@ public class CounterTempo : MonoBehaviour
     public float deltaTempo;
     public int min, hora, dia;
 
+    private void Start()
+    {
+        string caminho = Application.persistentDataPath + "/galoEventos.json";
+        string jsonStringor = File.ReadAllText(caminho);
+        if (!File.Exists(caminho) || String.IsNullOrEmpty(jsonStringor))
+        {
+            obj.eventoMeteoro = false;
+            string json = JsonUtility.ToJson(obj);
+            File.WriteAllText(caminho, json);
+        }
+        obj = JsonUtility.FromJson<galoClasse>(jsonStringor);
+
+        if (obj.eventoMeteoro) {
+            loadTempo();
+        }
+    }
     void Update()
     {
         float grausPorSegundo = 360f / duracaoDia;
@@ -39,18 +58,8 @@ public class CounterTempo : MonoBehaviour
         {
             Debug.Log("cabo");
         }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            salvarTempo();
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            loadTempo();
-        }
-
+        //Debug.Log(@$"dia: {dia} | {hora}:{min}");
         float rotacao = grausPorSegundo * tempo;
-        Debug.Log(@$"dia: {dia} | {hora}:{min}");
         escudo.transform.RotateAround(exo.position, transform.forward, rotacao * Time.deltaTime);
     }
     public void salvarTempo()

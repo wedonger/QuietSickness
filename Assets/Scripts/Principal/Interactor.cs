@@ -24,6 +24,7 @@ public class Interactor : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
+            Debug.DrawRay(r.origin, r.direction);
             if(Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
             {
                 GameObject obj = hitInfo.collider.gameObject;

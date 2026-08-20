@@ -8,6 +8,16 @@ public class salvaDias
     public int min, hora, dia;
     public float deltaTempo;
     public bool jaTocoCutsceneMeteoro;
+
+    public salvaDias()
+    {
+        min = 0;
+        hora = 0;
+        dia = 0;
+        deltaTempo = 0;
+        jaTocoCutsceneMeteoro = false;
+    }
+
     public salvaDias(CounterTempo counter) 
     { 
         min = counter.min;

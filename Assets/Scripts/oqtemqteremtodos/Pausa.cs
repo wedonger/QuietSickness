@@ -7,11 +7,12 @@ using UnityEngine.SceneManagement;
 public class Pausa : MonoBehaviour
 {
     public GameObject menu;
-    public camera cabeca;
-    public static bool zaWardo; 
+    public GameObject cabeca;
+    public static bool zaWardo;
     void Start()
     {
         menu.SetActive(false);
+        saveSystem.loadPosPlayer();
     }
 
     void Update()
@@ -36,7 +37,7 @@ public class Pausa : MonoBehaviour
         zaWardo = false;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        cabeca.enabled = true;
+        cabeca.SetActive(false);
     }
     public void ParaTempo()
     {
@@ -45,12 +46,25 @@ public class Pausa : MonoBehaviour
         zaWardo = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        cabeca.enabled = false;
+        cabeca.SetActive(true);
     }
 
     public void voltaProMenu()
     {
         SceneManager.UnloadScene(1); //nnseiseprecisa falta chamar os metodos quando clica nos botao v i r o s
         SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
+    public void SalvaGame() {
+        var barco = FindObjectOfType<Barco>();
+        var tempoObj = GameObject.Find("MadoInHeaven");
+        var playerObj = GameObject.Find("Player");
+        CounterTempo tmpo = tempoObj.gameObject.GetComponent<CounterTempo>();
+        cactomove player = playerObj.gameObject.GetComponent<cactomove>();
+        saveSystem.salvaDias(tmpo);
+        saveSystem.salvaPosBarco(barco);
+        saveSystem.salvaPosPlayer(player);
+
+        galoClasse galo = new galoClasse();
+        galo.salvarJojo();
     }
 }
